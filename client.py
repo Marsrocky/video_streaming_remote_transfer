@@ -9,21 +9,17 @@ video_length = 5 # seconds
 video_num = 5
 ctr = 0
 
-fps = 10
+fps = 25
 video_size = (1280, 720)
-
-# Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
-# Define the fps to be equal to 10. Also frame size is passed.
-# cap height/width should be checked in the server side
-
-start_time = time.time()
-# Initialize videowriter
-# codec: *'XVID' saves more space
-video_name = ''.join(['data/', str(ctr), '.avi'])
-out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), fps, video_size)
 
 r = requests.get('http://'+server_IP+':'+str(port)+'/video_feed', stream=True)
 if(r.status_code == 200):
+    start_time = time.time()
+    # Initialize videowriter
+    # codec: *'XVID' saves more space
+    video_name = ''.join(['data/', str(ctr), '.avi'])
+    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), fps, video_size)
+
     # Receive streaming
     bytes = bytes()
     for chunk in r.iter_content(chunk_size=1024*10):
@@ -51,7 +47,7 @@ if(r.status_code == 200):
                 else:   # next video clip
                     out.release()
                     video_name = ''.join(['data/', str(ctr), '.avi'])
-                    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), 10, video_size)
+                    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), fps, video_size)
                     start_time = time.time()
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
