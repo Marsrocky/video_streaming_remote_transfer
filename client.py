@@ -5,8 +5,8 @@ import numpy as np
 
 server_IP = '127.0.0.1'
 port = 5000
-video_length = 5 # seconds
-video_num = 5
+video_length = 4 # seconds
+video_num = 3
 ctr = 0
 
 fps = 25
@@ -14,7 +14,6 @@ video_size = (1280, 720)
 
 r = requests.get('http://'+server_IP+':'+str(port)+'/video_feed', stream=True)
 if(r.status_code == 200):
-    start_time = time.time()
     # Initialize videowriter
     # codec: *'XVID' saves more space
     video_name = ''.join(['data/', str(ctr), '.avi'])
@@ -22,6 +21,7 @@ if(r.status_code == 200):
 
     # Receive streaming
     bytes = bytes()
+    start_time = time.time()
     for chunk in r.iter_content(chunk_size=1024*10):
         bytes += chunk
         a = bytes.find(b'\xff\xd8')
@@ -38,14 +38,13 @@ if(r.status_code == 200):
             out.write(frame)
 
             if time.time() - start_time > video_length:
+                out.release()
                 print ('[LOG] {} successfully saved'.format(video_name))
                 ctr += 1
                 if ctr == video_num:    # stop
-                    out.release()
                     cv2.destroyAllWindows()
                     exit(0)
                 else:   # next video clip
-                    out.release()
                     video_name = ''.join(['data/', str(ctr), '.avi'])
                     out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), fps, video_size)
                     start_time = time.time()
