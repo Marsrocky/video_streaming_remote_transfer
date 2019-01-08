@@ -22,7 +22,7 @@ start_time = time.time()
 video_name = ''.join(['data/', str(ctr), '.avi'])
 out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), fps, video_size)
 
-r = requests.get('http://'+server_IP+':'+port+'/video_feed', stream=True)
+r = requests.get('http://'+server_IP+':'+str(port)+'/video_feed', stream=True)
 if(r.status_code == 200):
     # Receive streaming
     bytes = bytes()
@@ -51,7 +51,7 @@ if(r.status_code == 200):
                 else:   # next video clip
                     out.release()
                     video_name = ''.join(['data/', str(ctr), '.avi'])
-                    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), 10, (1280, 720))
+                    out = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc('M','J','P','G'), 10, video_size)
                     start_time = time.time()
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
