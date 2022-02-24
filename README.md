@@ -2,7 +2,7 @@
 Transfer video streaming via flask and opencv
 -----------
 ### Objective
-This tool is for remote video streaming, which is designed to collect video dataset for me. It can automatically obtain `n` clips with `m` time length.
+This tool is for remote video streaming, which is designed to collect video dataset. It can automatically obtain `n` clips with `m` time length.
 
 ### Server
 - app.py: start a flask server
